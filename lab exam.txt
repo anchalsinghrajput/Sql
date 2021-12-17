@@ -1,0 +1,94 @@
+
+					PROGRAM 1
+
+SQL> create table student (usn varchar(10), sname varchar(10), address varchar(20), phone varchar(12), primary key(usn));
+SQL> create table semsec(ssid varchar(10), sem varchar(10), sec varchar(10), primary key (ssid));
+SQL> create table class(usn varchar(10), ssid varchar(10), primary key(usn,ssid), foreign key(usn) references student (usn), foreign key(ssid) references semsec(ssid));
+SQL> create table subject(subid varchar(10) primary key, title varchar(10), sem varchar(10), credit int);
+SQL> create table iamarks(usn varchar(10), subid varchar(10), ssid varchar(10), test1 int, test2 int, test3 int, finalia int, foreign key(usn) references student(usn), foreign key(subid) references subject(subid),foreign key(ssid) references semsec(ssid));
+
+SQL> alter table student add gender varchar(1);
+SQL> alter table student add (fess int , dob varchar(10));
+SQL> alter table student modify dob date;
+SQL> alter table student rename column dob to dateofbirth;
+SQL> rename student to newstudent;
+SQL> alter table newstudent drop column phone;
+SQL> drop table newstudent cascade constraints;
+
+
+					PROGRAM 2
+ 
+SQL> create table emp(emp_id int, ename varchar(15), job varchar(15), hiredate date, sal int, comm int, dept_no int, primary key(emp_id));
+SQL> insert into emp values(7839,'king','president',to_date('17-11-1981','dd-mm-yyyy'),5000, null, 10);
+SQL> create table emp1 as select * from emp;
+SQL> select * from emp  where sal>2000;                                                     
+SQL> select * from emp where sal>3000;
+SQL> select distinct(sal) from emp;                                                                                                                                       
+SQL> select * from emp order by hiredate;
+SQL> select * from emp order by hiredate desc;
+SQL> update emp set sal = 5000 where emp_id = 7839;
+SQL> delete from emp where emp_id=7839;
+SQL> select * from emp where sal between 2000 and 3000;
+SQL> select * from emp where job IN('ANALYST','MARKETING');
+SQL> select ename from emp where ename like 'S%';
+SQL> select ename from emp where ename not like 'S%';
+
+				
+					PROGRAM 3
+
+SQL> select sum(sal) as "sum", min(sal) as "minimum" , max(sal) as "maximum" , avg(sal) as "average" from emp;
+SQL> select now();
+SQL> select date('2014-12-02');
+SQL> select date('2014-12-02 13:00:00');
+SQL> select day('2014-12-02');
+SQL> select day('2014-12-02 13:00:00');
+SQL> select time('2014-12-02 13:00:00');
+SQL> select time('13:00:00');
+SQL> select ename, sal from emp group by ename, sal;
+SQL> select dept_no , sum(Sal) from emp group by dept_no having dept_no=10;
+
+
+					PROGRAM 4
+
+SQL> create table e_dept(emp_id int, emp_dept varchar(10));
+SQL> insert into e_dept values(7782 , 'civil');
+SQL> create table emp(emp_id int, ename varchar(15), job varchar(15), hiredate date, sal int, comm int, dept_no int, primary key(emp_id));
+SQL> insert into emp values(7839,'king','president',to_date('17-11-1981','dd-mm-yyyy'),5000, null, 10);
+SQL> select * from emp;
+SQL> select * from e_dept;                                                                                                                                 
+SQL> select * from emp where emp_id  in(select emp_id from e_dept where emp_dept='computer');
+SQL> update emp set sal = sal*0.5 where emp_id in (select emp_id from e_dept where emp_dept = 'civil');
+SQL> delete from emp where emp_id in(select emp_id from e_dept where emp_dept='computer');
+SQL> update emp set sal = sal*0.5 where emp_id not in (select emp_id from e_dept where emp_dept = 'civil');
+SQL> delete from emp where emp_id not in(select emp_id from e_dept where emp_dept='computer');
+
+SQL> create table emp33( id int, name varchar(10), city varchar(10), sal int);
+SQL> insert into emp33 values(1,'aditya','Delhi',2000);
+
+SQL> create table emp34( id int, name varchar(10), city varchar(10), sal int);
+SQL> insert into emp34 values(6,'pooja','delhi',8000);
+
+SQL> select * from emp33 where sal<any(select sal from emp34 where city='pune');
+SQL> select * from emp33 where sal<some(select sal from emp34 where city='pune');
+SQL> select * from emp33 where sal<=any(select sal from emp34 where city='pune');
+SQL> select * from emp33 where sal<=some(select sal from emp34 where city='pune');
+SQL> select * from emp33 where sal>=any(select sal from emp34 where city='pune');
+SQL> select * from emp33 where sal>=some(select sal from emp34 where city='pune');
+	
+
+				
+					PROGRAM 5
+
+SQL> create table emp(emp_id int, ename varchar(15), job varchar(15), hiredate date, sal int, comm int, dept_no int, primary key(emp_id));
+SQL> insert into emp values(7839,'king','president',to_date('17-11-1981','dd-mm-yyyy'),5000, null, 10);
+SQL> insert into emp values( 7698, 'BLAKE', 'MANAGER',to_date('1-5-1981','dd-mm-yyyy'),2850, null, 30);
+SQL> select * from emp;
+SQL> create view emp_v1 as select * from emp;
+SQL> create view emp_v2 as select emp_id, ename from emp;
+SQL> create or replace view emp_v3 as select emp_id, ename from emp where sal > 2900;
+SQL> update emp_v1 set sal=7000 where emp_id = 7788;
+SQL> select * from emp_v1;
+SQL> drop view emp_v3;
+
+
+
